@@ -5,9 +5,22 @@ import xml.etree.ElementTree as ET
 from tqdm import tqdm
 import scipy.ndimage
 
+# resample a given image (2D numpy-array) considering a resampeling factor and an interpolation algo 
+def resample_image(img,factor,interpolation='nearest'):
+    if interpolation=='nearest':
+        order=0
+    elif interpolation=='bilinear':
+        order=1
+    elif interpolation=='cubic':
+        order=2  
+    else:
+        raise ValueError("interpolation algorithm must be one of the following:  nearest, bilinear, cubic ")
+    return scipy.ndimage.zoom(img, factor, order=order)
+
 # read Sentinel-2 image in SAFE format and return it as a dictionarry
 def read_s2(safe,res):
     inpath=safe+'/GRANULE/'+os.listdir(safe+'/GRANULE/')[0]+'/IMG_DATA/R%sm/'%(str(res))
+    inpathSCL=safe+'/GRANULE/'+os.listdir(safe+'/GRANULE/')[0]+'/IMG_DATA/R%sm/'%(str(20))
     MTD_TL=safe+'/GRANULE/%s/MTD_TL.xml'%(os.listdir(safe+'/GRANULE/')[0])
     
     s2={}
@@ -22,8 +35,19 @@ def read_s2(safe,res):
     (VZA, VAA, colstep,rowstep)=extract_sensor_angles(MTD_TL)
     s2.update({'SZA':SZA,'SAA':SAA,'VZA':VZA,'VAA':VAA})
     s2['profile'].update({'count':len(s2)-1})
+    
+    #add SCL map
+    for fn in tqdm([os.path.join(inpathSCL,f) for f in os.listdir(inpathSCL) if f.endswith('SCL_20m.jp2')]): 
+        print(fn)
+        with rasterio.open(fn) as src:
+            s2.update({'SCL':src.read(1)})  
+    factor=s2['B03'].shape[0]/s2['SCL'].shape[0]
+    print(factor)
+    s2['SCL']=resample_image(s2['SCL'],factor,interpolation='nearest')
+
     return s2
 
+    
 # extract sun view and azimuth angles from xml file saved in Sentinel-2 SAFE data
 def extract_sun_angles(xml):
     """Extract Sentinel-2 solar angle bands values from MTD_TL.xml.
@@ -143,17 +167,6 @@ def extract_sensor_angles(xml):
     sensor_azimuth_values = resize(sensor_azimuth_values[7],(22,22))
     return(sensor_zenith_values, sensor_azimuth_values,colstep,rowstep)
 
-# resample a given image (2D numpy-array) considering a resampeling factor and an interpolation algo 
-def resample_image(img,factor,interpolation='nearest'):
-    if interpolation=='nearest':
-        order=0
-    elif interpolation=='bilinear':
-        order=1
-    elif interpolation=='cubic':
-        order=2  
-    else:
-        raise ValueError("interpolation algorithm must be one of the following:  nearest, bilinear, cubic ")
-    return scipy.ndimage.zoom(img, factor, order=order)
 
 
 
