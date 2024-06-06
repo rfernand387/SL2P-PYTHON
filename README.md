@@ -15,7 +15,7 @@ Outputs
 -------
 SL2P-PYTHON is designed to estimate five vegetation variables (Table 1). 
 
-Products are composed of 4-layers and exported in GeoTIFF format (Table 2). 
+Products are composed of 5-layers and exported in GeoTIFF format (Table 2). 
 
 
 
@@ -35,8 +35,8 @@ Products are composed of 4-layers and exported in GeoTIFF format (Table 2).
 
 |Layer                                         |	Description                                              |
 |----------------------------------------------|-----------------------------------------------------------|
-|Vegetation variable estimate	                 |Map of vegetation variable *                               | 
-|Uncertainty of vegetation variable estimates	 |Map of the uncertainty of vegetation variable *2           |
+|Vegetation variable estimate	                 |Map of vegetation variable *30                             | 
+|Uncertainty of vegetation variable estimates	 |Map of the uncertainty of vegetation variable *30          |
 |SL2P input flag (Quality Code)	               |0: Valid, 1: SL2P input out of SL2P calibration domain     |
 |SL2P output flag (Quality Code)               |	0: Valid, 1: estimates out of the nominal variation range|
 |SCL Map (S2 Scene Classification Layer)       |https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED|
