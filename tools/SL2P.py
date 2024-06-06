@@ -1,6 +1,5 @@
 from tools import toolsNets
 from tools import dictionariesSL2P 
- 
 
 import numpy 
 from datetime import datetime

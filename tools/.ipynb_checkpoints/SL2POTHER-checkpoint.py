@@ -5,17 +5,16 @@ import pickle
  # Sentinel2 Functions: 
  # --------------------
 def s2_createFeatureCollection_estimates():
-    with open('nets/SL2PENF.pkl', "rb") as fp:   #Pickling
+    with open('C:/Users/rfernand\Downloads/SL2P-PYTHON-main/SL2P-PYTHON-main/nets/SL2PV0.pkl', "rb") as fp:   #Pickling
         file = pickle.load(fp)
     fp.close()    
     return file
 
 def s2_createFeatureCollection_errors():
-    with open('nets/SL2PENF_errors.pkl', "rb") as fp:   #Pickling
+    with open('C:/Users/rfernand\Downloads/SL2P-PYTHON-main/SL2P-PYTHON-main/nets/SL2PV0_error.pkl', "rb") as fp:   #Pickling
         file = pickle.load(fp)
     fp.close()    
     return file
-
 
 def s2_createFeatureCollection_domains():
     with open('nets/S2_SL2P_WEISS_ORIGINAL_DOMAIN.pkl', "rb") as fp:   #Pickling
